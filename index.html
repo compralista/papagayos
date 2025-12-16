@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directorio de Negocios Papagayos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+/* --- VARIABLES Y CONFIGURACIÓN BASE --- */
+:root {
+    --primary: #2E7D32; /* Verde bosque profesional */
+    --primary-light: #e8f5e9;
+    --accent: #FF6D00; /* Naranja vibrante para llamadas a la acción */
+    --bg-body: #F4F6F8;
+    --text-dark: #1E293B;
+    --text-gray: #64748B;
+    --white: #ffffff;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-hover: 0 12px 24px rgba(0,0,0,0.1);
+    --radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body { 
+    font-family: 'Inter', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background-color: var(--bg-body); 
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: 'Poppins', sans-serif; margin: 0; }
+
+/* --- HEADER / HERO SECTION --- */
+header { 
+    background: linear-gradient(135deg, #1b5e20 0%, #43a047 100%);
+    color: white; 
+    padding: 60px 20px; 
+    text-align: center; 
+    border-radius: 0 0 30px 30px;
+    box-shadow: 0 4px 20px rgba(46, 125, 50, 0.25);
+    margin-bottom: 40px;
+}
+header h1 { font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 10px; }
+header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; margin: 0 auto; }
+
+/* --- LAYOUT PRINCIPAL --- */
+.container { 
+    display: flex; 
+    max-width: 1280px; 
+    margin: 0 auto; 
+    padding: 0 20px; 
+    gap: 30px;
+}
+
+/* --- SIDEBAR (FILTROS) --- */
+.sidebar { 
+    width: 280px; 
+    flex-shrink: 0;
+    background: var(--white); 
+    padding: 25px; 
+    border-radius: var(--radius); 
+    box-shadow: var(--shadow-sm); 
+    height: fit-content;
+    position: sticky; 
+    top: 20px;
+}
+.sidebar h3 { font-size: 1.1rem; color: var(--text-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.sidebar h3 i { color: var(--primary); }
+
+.filter-group { margin-bottom: 20px; }
+.filter-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-dark); }
+.filter-group input, .filter-group select { 
+    width: 100%; 
+    padding: 12px 15px; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 10px; 
+    background-color: #f8fafc; 
+    font-size: 0.95rem; 
+    transition: var(--transition);
+    outline: none;
+    font-family: 'Inter', sans-serif;
+}
+.filter-group input:focus, .filter-group select:focus {
+    border-color: var(--primary);
+    background-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+/* --- LISTA DE NEGOCIOS --- */
+.negocios-list { 
+    flex-grow: 1; 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+    gap: 25px;
+    align-content: start;
+}
+
+/* --- TARJETA DE NEGOCIO (CARD) --- */
+.negocio-card { 
+    background: var(--white); 
+    border-radius: var(--radius); 
+    box-shadow: var(--shadow-sm); 
+    transition: var(--transition); 
+    position: relative; 
+    cursor: pointer;
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.negocio-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(46, 125, 50, 0.2);
+}
+
+/* Header de la tarjeta */
+.card-header { 
+    display: flex; 
+    align-items: center; 
+    padding: 20px; 
+    background: #fff;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.logo { 
+    width: 65px; 
+    height: 65px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    margin-right: 15px; 
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.info-principal { flex: 1; }
+.info-principal h2 { font-size: 1.15rem; color: var(--text-dark); line-height: 1.3; margin-bottom: 4px; }
+.info-principal .rubro { 
+    font-size: 0.75rem; 
+    color: var(--primary); 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px;
+    background: var(--primary-light);
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Cuerpo de la tarjeta */
+.card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 10px;}
+
+.info-row { display: flex; align-items: flex-start; gap: 10px; color: var(--text-gray); font-size: 0.9rem; }
+.info-row i { color: #94a3b8; margin-top: 3px; width: 16px; text-align: center;}
+.info-row.payment i { color: #3b82f6; }
+
+.horarios-concisos { 
+    font-size: 0.85rem; 
+    color: var(--text-gray); 
+    background: #f8fafc;
+    padding: 10px;
+    border-radius: 8px;
+    line-height: 1.5;
+}
+
+/* Estados y Badges */
+.estado-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 15px;
+}
+
+.estado { 
+    padding: 6px 12px; 
+    border-radius: 20px; 
+    font-weight: 600; 
+    font-size: 0.75rem; 
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.estado::before { content: ''; width: 8px; height: 8px; border-radius: 50%; display: block; }
+
+.estado.abierto { background-color: #ecfdf5; color: #059669; }
+.estado.abierto::before { background-color: #059669; }
+
+.estado.cerrado { background-color: #fef2f2; color: #dc2626; }
+.estado.cerrado::before { background-color: #dc2626; }
+
+/* Icono Delivery mejorado */
+.delivery-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    opacity: 0.2;
+}
+.delivery-badge.has-delivery {
+    color: var(--accent);
+    opacity: 1;
+    background: #fff7ed;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(255, 109, 0, 0.2);
+}
+
+/* Banner de Oferta */
+.banner-simple {
+    background: linear-gradient(90deg, #fff3e0 0%, #ffe0b2 100%);
+    color: #e65100;
+    padding: 8px 12px;
+    margin-top: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-left: 3px solid #ef6c00;
+}
+
+/* Botones Paginación */
+.page-buttons { text-align: center; margin: 40px 0; }
+.page-buttons button { 
+    margin: 0 4px; 
+    width: 40px; 
+    height: 40px; 
+    border: none; 
+    border-radius: 10px; 
+    background: white; 
+    color: var(--text-dark); 
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+.page-buttons button:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.page-buttons button.active { background: var(--primary); color: white; transform: scale(1.1); }
+
+/* Spinner */
+#spinner {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255,255,255,0.95);
+    display: flex; flex-direction: column; gap: 15px;
+    align-items: center; justify-content: center;
+    z-index: 9999;
+}
+.spinner-icon { font-size: 3rem; color: var(--primary); }
+.spinner-text { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--text-dark); }
+
+/* Responsive */
+@media(max-width: 992px){
+    .container{ flex-direction: column; }
+    .sidebar{ width: auto; position: static; margin-bottom: 20px; }
+    header { padding: 40px 20px; border-radius: 0 0 20px 20px; }
+    header h1 { font-size: 1.8rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="spinner">
+    <i class="fas fa-circle-notch fa-spin spinner-icon"></i>
+    <div class="spinner-text">Cargando negocios...</div>
+</div>
+
+<header>
+    <h1>COMPRA LISTA</h1>
+    <p>La guía definitiva de comercios y servicios en Papagayos.</p>
+</header>
+
+<div class="container">
+    <aside class="sidebar">
+        <h3><i class="fas fa-filter"></i> Filtros</h3>
+        <div class="filter-group">
+            <label for="busqueda-nombre">Buscar</label>
+            <input type="text" id="busqueda-nombre" placeholder="¿Qué estás buscando?">
+        </div>
+        <div class="filter-group">
+            <label for="filtro-categoria">Categoría</label>
+            <select id="filtro-categoria">
+                <option value="todos">Ver todas</option>
+            </select>
+        </div>
+    </aside>
+
+    <main class="negocios-list" id="negocios-container"></main>
+</div>
+
+<div class="page-buttons" id="paginador"></div>
+
+<script>
+// --- TU LÓGICA DE JAVASCRIPT (INTACTA PERO OPTIMIZADA) ---
+let allCards = [];
+let currentPage = 1;
+const cardsPerPage = 15;
+
+function checkHorario(card){
+    const ahora = new Date();
+    const dia = ahora.getDay();
+    const horaMinutos = ahora.getHours()*60 + ahora.getMinutes();
+    const dias = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+    const hoy = card.getAttribute('data-' + dias[dia].toLowerCase()) || 'Cerrado';
+    
+    if(hoy.toLowerCase().includes('cerrado')) return {estado:'cerrado', texto:'Cerrado ahora'};
+    
+    const bloques = hoy.split(',').map(b=>b.trim());
+    for(const b of bloques){
+        let [ini, fin] = b.split('-');
+        if(!ini || !fin) continue;
+        if(!ini.includes(':')) ini += ':00';
+        if(!fin.includes(':')) fin += ':00';
+        const [hI,mI]=ini.split(':').map(Number); 
+        const [hF,mF]=fin.split(':').map(Number);
+        let inicio = hI*60+mI; 
+        let cierre = hF*60+mF; 
+        if(cierre < inicio) cierre += 1440;
+        
+        if(horaMinutos >= inicio && horaMinutos < cierre) return {estado:'abierto', texto:`Abierto hasta ${fin}`};
+    }
+    return {estado:'cerrado', texto:'Cerrado ahora'};
+}
+
+function actualizarEstados(){
+    allCards.forEach(card=>{
+        const res = checkHorario(card);
+        const estadoSpan = card.querySelector('.estado');
+        estadoSpan.textContent = res.texto;
+        estadoSpan.classList.remove('abierto','cerrado');
+        estadoSpan.classList.add(res.estado);
+        
+        // Formateo de horarios más limpio
+        let horariosTexto = "";
+        const diasSemana = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+        const diaActual = new Date().getDay(); // 0 es Domingo
+        // Ajuste para mapear domingo (0) al final si queremos orden Lunes-Dom, o simplemente resaltar el dia
+        const diaIndex = diaActual === 0 ? 6 : diaActual - 1; 
+
+        // Solo mostramos el horario de hoy para no saturar, o un resumen
+        const nombreDiaHoy = diasSemana[diaIndex];
+        const horarioHoy = card.getAttribute('data-'+nombreDiaHoy.toLowerCase());
+        
+        card.querySelector('.horarios-concisos').innerHTML = `
+            <strong>Hoy (${nombreDiaHoy}):</strong> ${horarioHoy ? horarioHoy : 'Consultar'}
+        `;
+    });
+}
+
+function mostrarPagina(cards, page=1){
+    const container = document.getElementById('negocios-container');
+    container.innerHTML = '';
+    const start = (page-1)*cardsPerPage;
+    const end = start+cardsPerPage;
+    const pageCards = cards.slice(start, end);
+    
+    // Animación simple de entrada
+    pageCards.forEach((c, index) => {
+        c.style.animation = `fadeIn 0.4s ease forwards ${index * 0.05}s`;
+        c.style.opacity = '0'; // Inicialmente oculto para la animación
+        container.appendChild(c);
+    });
+
+    const pagDiv = document.getElementById('paginador');
+    pagDiv.innerHTML = '';
+    const totalPages = Math.ceil(cards.length/cardsPerPage);
+    if(totalPages > 1){
+        for(let i=1;i<=totalPages;i++){
+            const btn = document.createElement('button');
+            btn.textContent = i;
+            if(i===page) btn.classList.add('active');
+            btn.addEventListener('click',()=>{currentPage=i; mostrarPagina(cards,currentPage); window.scrollTo(0,0);});
+            pagDiv.appendChild(btn);
+        }
+    }
+}
+
+// Agregar keyframes para la animación dinámicamente
+const styleSheet = document.createElement("style");
+styleSheet.innerText = `@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(10px); } }`;
+document.head.appendChild(styleSheet);
+
+function aplicarFiltros(){
+    let filtrados = allCards;
+    const cat = document.getElementById('filtro-categoria').value.toLowerCase();
+    const busq = document.getElementById('busqueda-nombre').value.toLowerCase();
+
+    if(cat !== 'todos') filtrados = filtrados.filter(c=>c.getAttribute('data-rubro') === cat);
+    if(busq!=='') filtrados = filtrados.filter(c=>c.querySelector('h2').textContent.toLowerCase().includes(busq));
+
+    const abiertos = filtrados.filter(c=>c.querySelector('.estado').classList.contains('abierto'));
+    const cerrados = filtrados.filter(c=>!c.querySelector('.estado').classList.contains('abierto'));
+
+    // Shuffle simple
+    const shuffle = (array) => array.sort(() => Math.random() - 0.5);
+
+    filtrados = [...shuffle(abiertos), ...shuffle(cerrados)];
+    mostrarPagina(filtrados, 1); // Reset a pagina 1 al filtrar
+}
+
+function cargarLogo(img){
+    img.onerror = ()=> img.src = 'https://ui-avatars.com/api/?background=random&color=fff&size=128&name=Negocio';
+}
+
+const scriptURL = "https://script.google.com/macros/s/AKfycbz0JllnJh2zSJ0piwvXd-2gu9MpHHmvp80DTWVM0TtXYuZUgazciMC7GDbosYMUiSLKMw/exec";
+
+async function cargarNegocios() {
+    try {
+        const res = await fetch(scriptURL);
+        const negocios = await res.json();
+
+        const container = document.getElementById('negocios-container');
+        container.innerHTML = '';
+
+        negocios.forEach(n=>{
+            const card = document.createElement('div');
+            card.classList.add('negocio-card');
+            
+            // Data attributes
+            card.setAttribute('data-rubro', n.Rubro.toLowerCase());
+            ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"].forEach(d => {
+                card.setAttribute('data-'+d.toLowerCase(), n[d] || 'Cerrado');
+            });
+
+            const formasPago = n["Formas de pago"] || n["Formas de Pago"] || 'Consultar';
+            const tieneDelivery = n.Delivery === true || n.Delivery === "TRUE" || n.Delivery === "Si";
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <img src="${n["Logo URL"]}" alt="Logo" class="logo">
+                    <div class="info-principal">
+                        <h2>${n.Nombre}</h2>
+                        <span class="rubro">${n.Rubro}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <i class="fas fa-map-marker-alt"></i> 
+                        <span>${n.Domicilio}</span>
+                    </div>
+                    
+                    <div class="horarios-concisos"></div>
+                    
+                    <div class="info-row payment">
+                        <i class="fas fa-credit-card"></i> 
+                        <span>${formasPago}</span>
+                    </div>
+
+                    ${n.Banner && n.Banner.trim() !== "" 
+                        ? `<div class="banner-simple"><i class="fas fa-bullhorn"></i> ${n.Banner}</div>` 
+                        : ""
+                    }
+                    
+                    <div class="estado-container">
+                        <span class="estado">Cargando...</span>
+                    </div>
+                </div>
+                
+                <div class="delivery-badge ${tieneDelivery ? 'has-delivery' : ''}" 
+                     title="${tieneDelivery ? 'Hacen envíos' : 'Sin envío'}">
+                    <i class="fas fa-motorcycle"></i>
+                </div>
+            `;
+
+            cargarLogo(card.querySelector('.logo'));
+            card.addEventListener('click', ()=> window.open(n.URL,'_blank'));
+            container.appendChild(card);
+        });
+
+        allCards = Array.from(document.querySelectorAll('.negocio-card'));
+        actualizarEstados();
+
+        const selectCat = document.getElementById('filtro-categoria');
+        const categorias = new Set();
+        allCards.forEach(card=> categorias.add(card.getAttribute('data-rubro')));
+        Array.from(categorias).sort().forEach(cat=>{
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+            selectCat.appendChild(option);
+        });
+
+        aplicarFiltros();
+        document.getElementById('spinner').style.display = 'none';
+
+    } catch (error) {
+        console.error("Error cargando negocios", error);
+        document.getElementById('spinner').innerHTML = '<p style="color:red">Error al cargar los datos. Intenta recargar.</p>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    cargarNegocios();
+    document.getElementById('filtro-categoria').addEventListener('change', aplicarFiltros);
+    document.getElementById('busqueda-nombre').addEventListener('input', aplicarFiltros);
+});
+</script>
+
+</body>
+</html>
