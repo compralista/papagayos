@@ -12,7 +12,7 @@
 :root {
     --primary: #2E7D32; /* Verde bosque profesional */
     --primary-light: #e8f5e9;
-    --accent: #FF6D00; /* Naranja vibrante para llamadas a la acción */
+    --accent: #FF6D00; /* Naranja vibrante */
     --bg-body: #F4F6F8;
     --text-dark: #1E293B;
     --text-gray: #64748B;
@@ -83,6 +83,7 @@ header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; 
     transition: var(--transition);
     outline: none;
     font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
 }
 .filter-group input:focus, .filter-group select:focus {
     border-color: var(--primary);
@@ -168,7 +169,36 @@ header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; 
     line-height: 1.5;
 }
 
-/* Estados y Badges */
+/* DELIVERY INFO BOX */
+.delivery-info-box {
+    background-color: #fff7ed;
+    border: 1px dashed #ffcc80;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: var(--text-dark);
+}
+
+.delivery-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+.delivery-row:last-child { margin-bottom: 0; }
+.delivery-row i { color: var(--accent); width: 16px; text-align: center; }
+
+.costo-gratis {
+    color: var(--primary);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+.costo-precio { font-weight: 700; color: var(--text-dark); }
+
+/* Estados */
 .estado-container {
     display: flex;
     justify-content: space-between;
@@ -194,10 +224,11 @@ header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; 
 .estado.cerrado { background-color: #fef2f2; color: #dc2626; }
 .estado.cerrado::before { background-color: #dc2626; }
 
-/* Icono Delivery mejorado */
+/* Icono Delivery flotante */
 .delivery-badge {
     position: absolute;
-    top: 20px;
+    /* top: 20px;  <-- Modificado para que no choque con el corazón */
+    top: 60px;
     right: 20px;
     font-size: 1.2rem;
     color: var(--text-gray);
@@ -221,7 +252,7 @@ header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; 
     background: linear-gradient(90deg, #fff3e0 0%, #ffe0b2 100%);
     color: #e65100;
     padding: 8px 12px;
-    margin-top: 12px;
+    margin-top: 8px;
     border-radius: 8px;
     font-weight: 600;
     font-size: 0.8rem;
@@ -241,7 +272,7 @@ header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; 
     border-radius: 10px; 
     background: white; 
     color: var(--text-dark); 
-    cursor: pointer;
+    cursor: pointer; 
     font-weight: 600;
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
@@ -261,12 +292,137 @@ header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; 
 .spinner-icon { font-size: 3rem; color: var(--primary); }
 .spinner-text { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--text-dark); }
 
+/* --- ESTILOS PARA FAVORITOS (NUEVO) --- */
+.btn-favorito {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s, color 0.2s;
+    font-size: 1.1rem;
+    color: #cbd5e1; /* Gris cuando no es favorito */
+}
+.btn-favorito:hover { transform: scale(1.15); }
+.btn-favorito.activo {
+    color: #ff4757; 
+    border-color: #ff4757;
+    background: #fff0f1;
+}
+
+/* Botón de filtro "Ver Favoritos" */
+.toggle-fav-container {
+    margin-bottom: 20px;
+    background: #fff0f1;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px dashed #ff4757;
+    text-align: center;
+}
+.btn-ver-favoritos {
+    background: transparent;
+    border: none;
+    color: #ff4757;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+}
+.btn-ver-favoritos i { font-size: 1.2rem; }
+.btn-ver-favoritos.activo-filtro {
+    background: #ff4757;
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+}
+
 /* Responsive */
 @media(max-width: 992px){
     .container{ flex-direction: column; }
     .sidebar{ width: auto; position: static; margin-bottom: 20px; }
     header { padding: 40px 20px; border-radius: 0 0 20px 20px; }
     header h1 { font-size: 1.8rem; }
+}
+
+/* --- FOOTER Y SECCIÓN DE CONTACTO --- */
+footer {
+    background-color: var(--text-dark);
+    color: var(--white);
+    padding: 60px 20px 40px 20px;
+    margin-top: 100px;
+    text-align: center;
+}
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.cta-section {
+    background: var(--white);
+    color: var(--text-dark);
+    padding: 40px 30px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-hover);
+    width: 90%;            
+    max-width: 600px;      
+    margin: 0 auto;        
+    transform: translateY(-110px); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.cta-section h3 { color: var(--primary); margin-bottom: 10px; font-size: 1.5rem; }
+.cta-section p { margin-bottom: 20px; color: var(--text-gray); max-width: 450px; }
+
+.btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #25D366;
+    color: white;
+    padding: 16px 32px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: var(--transition);
+}
+.btn-whatsapp:hover {
+    background-color: #128C7E;
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+}
+.copyright-bar {
+    margin-top: -50px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 30px;
+    width: 100%;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+@media(max-width: 768px){
+    header { padding: 40px 15px; }
+    header h1 { font-size: 2rem; }
+    .cta-section { width: 95%; transform: translateY(-90px); padding: 30px 15px; }
+    .cta-section h3 { font-size: 1.3rem; }
+    .copyright-bar { margin-top: -30px; }
 }
 </style>
 </head>
@@ -285,6 +441,14 @@ header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; 
 <div class="container">
     <aside class="sidebar">
         <h3><i class="fas fa-filter"></i> Filtros</h3>
+        
+        <div class="toggle-fav-container">
+            <button id="btn-toggle-favoritos" class="btn-ver-favoritos">
+                <i class="far fa-heart" id="icon-toggle-fav"></i> 
+                <span id="text-toggle-fav">Ver mis Favoritos</span>
+            </button>
+        </div>
+
         <div class="filter-group">
             <label for="busqueda-nombre">Buscar</label>
             <input type="text" id="busqueda-nombre" placeholder="¿Qué estás buscando?">
@@ -301,13 +465,65 @@ header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; 
 </div>
 
 <div class="page-buttons" id="paginador"></div>
+<footer>
+    <div class="footer-content">
+        <div class="cta-section">
+            <h3>¿Tenés un comercio o brindás un servicio?</h3>
+            <p>Sumate a la guía más completa de Papagayos y aumentá tus ventas.</p>
+            <a href="https://wa.me/5492664212722?text=Hola!%20Me%20interesa%20sumar%20mi%20negocio%20a%20Compra%20Lista" class="btn-whatsapp" target="_blank">
+                <i class="fab fa-whatsapp"></i> AGREGAR MI NEGOCIO
+            </a>
+        </div>
+        
+        <div class="copyright-bar">
+            <p>&copy; 2026 Compra Lista. Todos los derechos reservados.</p>
+            <p><small>Diseñado para potenciar el comercio local.</small></p>
+        </div>
+    </div>
+</footer>
 
 <script>
-// --- TU LÓGICA DE JAVASCRIPT (INTACTA PERO OPTIMIZADA) ---
+// --- VARIABLES GLOBALES ---
 let allCards = [];
 let currentPage = 1;
 const cardsPerPage = 15;
+// URL DEL SCRIPT DE GOOGLE
+const scriptURL = "https://script.google.com/macros/s/AKfycbzYLWtg0LKzTjPWMRZoBfxKIrq1htKdP3QDBzF9gv3cKRfl7LK7Qlvx4nREnHQMJLOR/exec";
 
+// --- LÓGICA DE FAVORITOS (LOCALSTORAGE) ---
+let misFavoritos = JSON.parse(localStorage.getItem('userFavoritos')) || [];
+let viendoSoloFavoritos = false;
+
+function guardarFavorito(nombreNegocio) {
+    if (misFavoritos.includes(nombreNegocio)) {
+        misFavoritos = misFavoritos.filter(fav => fav !== nombreNegocio);
+    } else {
+        misFavoritos.push(nombreNegocio);
+    }
+    localStorage.setItem('userFavoritos', JSON.stringify(misFavoritos));
+    actualizarBotonesCorazon();
+    if (viendoSoloFavoritos) aplicarFiltros(); 
+}
+
+function actualizarBotonesCorazon() {
+    allCards.forEach(card => {
+        const nombre = card.getAttribute('data-nombre');
+        const btn = card.querySelector('.btn-favorito');
+        const icon = btn.querySelector('i');
+        
+        if (misFavoritos.includes(nombre)) {
+            btn.classList.add('activo');
+            icon.classList.remove('far'); 
+            icon.classList.add('fas');    
+        } else {
+            btn.classList.remove('activo');
+            icon.classList.remove('fas');
+            icon.classList.add('far');
+        }
+    });
+}
+
+// --- LÓGICA DE HORARIOS ---
 function checkHorario(card){
     const ahora = new Date();
     const dia = ahora.getDay();
@@ -342,14 +558,10 @@ function actualizarEstados(){
         estadoSpan.classList.remove('abierto','cerrado');
         estadoSpan.classList.add(res.estado);
         
-        // Formateo de horarios más limpio
-        let horariosTexto = "";
         const diasSemana = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
-        const diaActual = new Date().getDay(); // 0 es Domingo
-        // Ajuste para mapear domingo (0) al final si queremos orden Lunes-Dom, o simplemente resaltar el dia
+        const diaActual = new Date().getDay(); 
         const diaIndex = diaActual === 0 ? 6 : diaActual - 1; 
 
-        // Solo mostramos el horario de hoy para no saturar, o un resumen
         const nombreDiaHoy = diasSemana[diaIndex];
         const horarioHoy = card.getAttribute('data-'+nombreDiaHoy.toLowerCase());
         
@@ -359,17 +571,29 @@ function actualizarEstados(){
     });
 }
 
+// --- PAGINACIÓN ---
 function mostrarPagina(cards, page=1){
     const container = document.getElementById('negocios-container');
     container.innerHTML = '';
+    
+    // Si no hay resultados
+    if(cards.length === 0) {
+        container.innerHTML = `<div style="width:100%; text-align:center; padding:40px; color:#64748B;">
+            <i class="far fa-frown" style="font-size:3rem; margin-bottom:10px;"></i>
+            <h3>No encontramos negocios</h3>
+            <p>${viendoSoloFavoritos ? 'Aún no tienes favoritos guardados.' : 'Intenta con otro filtro.'}</p>
+        </div>`;
+        document.getElementById('paginador').innerHTML = '';
+        return;
+    }
+
     const start = (page-1)*cardsPerPage;
     const end = start+cardsPerPage;
     const pageCards = cards.slice(start, end);
     
-    // Animación simple de entrada
     pageCards.forEach((c, index) => {
         c.style.animation = `fadeIn 0.4s ease forwards ${index * 0.05}s`;
-        c.style.opacity = '0'; // Inicialmente oculto para la animación
+        c.style.opacity = '0';
         container.appendChild(c);
     });
 
@@ -387,35 +611,41 @@ function mostrarPagina(cards, page=1){
     }
 }
 
-// Agregar keyframes para la animación dinámicamente
+// Animación CSS JS
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(10px); } }`;
 document.head.appendChild(styleSheet);
 
+// --- FILTROS ---
 function aplicarFiltros(){
     let filtrados = allCards;
     const cat = document.getElementById('filtro-categoria').value.toLowerCase();
     const busq = document.getElementById('busqueda-nombre').value.toLowerCase();
 
+    // 1. Filtro Categoría
     if(cat !== 'todos') filtrados = filtrados.filter(c=>c.getAttribute('data-rubro') === cat);
+    
+    // 2. Filtro Buscador
     if(busq!=='') filtrados = filtrados.filter(c=>c.querySelector('h2').textContent.toLowerCase().includes(busq));
+
+    // 3. Filtro FAVORITOS
+    if (viendoSoloFavoritos) {
+        filtrados = filtrados.filter(c => misFavoritos.includes(c.getAttribute('data-nombre')));
+    }
 
     const abiertos = filtrados.filter(c=>c.querySelector('.estado').classList.contains('abierto'));
     const cerrados = filtrados.filter(c=>!c.querySelector('.estado').classList.contains('abierto'));
 
-    // Shuffle simple
     const shuffle = (array) => array.sort(() => Math.random() - 0.5);
-
     filtrados = [...shuffle(abiertos), ...shuffle(cerrados)];
-    mostrarPagina(filtrados, 1); // Reset a pagina 1 al filtrar
+    mostrarPagina(filtrados, 1);
 }
 
 function cargarLogo(img){
     img.onerror = ()=> img.src = 'https://ui-avatars.com/api/?background=random&color=fff&size=128&name=Negocio';
 }
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbxzMyFZEPQlbHIJ2VjSdxWByKcVcCSVcWa0Ct8YGeIA6QbR63wueJ8IEeBlwKZaPlsl/exec";
-
+// --- CARGA DE DATOS ---
 async function cargarNegocios() {
     try {
         const res = await fetch(scriptURL);
@@ -428,16 +658,44 @@ async function cargarNegocios() {
             const card = document.createElement('div');
             card.classList.add('negocio-card');
             
-            // Data attributes
+            card.setAttribute('data-nombre', n.Nombre); 
             card.setAttribute('data-rubro', n.Rubro.toLowerCase());
             ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"].forEach(d => {
                 card.setAttribute('data-'+d.toLowerCase(), n[d] || 'Cerrado');
             });
 
             const formasPago = n["Formas de pago"] || n["Formas de Pago"] || 'Consultar';
-            const tieneDelivery = n.Delivery === true || n.Delivery === "TRUE" || n.Delivery === "Si";
+            const tieneDelivery = n.Delivery === true;
 
+            // Logica Delivery
+            let rawCosto = n["Costo Delivery"]; 
+            let horarioDelivery = n["Horario Delivery"] || "";
+            let htmlCosto = "";
+
+            if (rawCosto !== undefined && rawCosto !== "") {
+                if (rawCosto == 0 || String(rawCosto).toLowerCase().includes("gratis")) {
+                    htmlCosto = `<span class="costo-gratis">¡GRATIS!</span>`;
+                } else {
+                    const esNumero = !isNaN(rawCosto);
+                    htmlCosto = `<span class="costo-precio">${esNumero ? '$' + rawCosto : rawCosto}</span>`;
+                }
+            }
+
+            let bloqueDelivery = "";
+            if (tieneDelivery && (htmlCosto || horarioDelivery)) {
+                bloqueDelivery = `
+                <div class="delivery-info-box">
+                    ${htmlCosto ? `<div class="delivery-row"><i class="fas fa-motorcycle"></i> <span>Envío: ${htmlCosto}</span></div>` : ''}
+                    ${horarioDelivery ? `<div class="delivery-row"><i class="far fa-clock"></i> <span>${horarioDelivery}</span></div>` : ''}
+                </div>`;
+            }
+
+            // HTML Interno
             card.innerHTML = `
+                <button class="btn-favorito" title="Agregar a favoritos">
+                    <i class="far fa-heart"></i>
+                </button>
+
                 <div class="card-header">
                     <img src="${n["Logo URL"]}" alt="Logo" class="logo">
                     <div class="info-principal">
@@ -450,24 +708,19 @@ async function cargarNegocios() {
                         <i class="fas fa-map-marker-alt"></i> 
                         <span>${n.Domicilio}</span>
                     </div>
-                    
                     <div class="horarios-concisos"></div>
-                    
                     <div class="info-row payment">
                         <i class="fas fa-credit-card"></i> 
                         <span>${formasPago}</span>
                     </div>
-
-                    ${n.Banner && n.Banner.trim() !== "" 
+                    ${bloqueDelivery} ${n.Banner && n.Banner.trim() !== "" 
                         ? `<div class="banner-simple"><i class="fas fa-bullhorn"></i> ${n.Banner}</div>` 
                         : ""
                     }
-                    
                     <div class="estado-container">
                         <span class="estado">Cargando...</span>
                     </div>
                 </div>
-                
                 <div class="delivery-badge ${tieneDelivery ? 'has-delivery' : ''}" 
                      title="${tieneDelivery ? 'Hacen envíos' : 'Sin envío'}">
                     <i class="fas fa-motorcycle"></i>
@@ -475,12 +728,24 @@ async function cargarNegocios() {
             `;
 
             cargarLogo(card.querySelector('.logo'));
+            
+            // EVENTOS
             card.addEventListener('click', ()=> window.open(n.URL,'_blank'));
+            
+            const favBtn = card.querySelector('.btn-favorito');
+            favBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                guardarFavorito(n.Nombre);
+                favBtn.style.transform = "scale(1.3)";
+                setTimeout(()=> favBtn.style.transform = "scale(1)", 200);
+            });
+
             container.appendChild(card);
         });
 
         allCards = Array.from(document.querySelectorAll('.negocio-card'));
         actualizarEstados();
+        actualizarBotonesCorazon(); 
 
         const selectCat = document.getElementById('filtro-categoria');
         const categorias = new Set();
@@ -497,7 +762,7 @@ async function cargarNegocios() {
 
     } catch (error) {
         console.error("Error cargando negocios", error);
-        document.getElementById('spinner').innerHTML = '<p style="color:red">Error al cargar los datos. Intenta recargar.</p>';
+        document.getElementById('spinner').innerHTML = '<p style="color:red; text-align:center;">Error al cargar datos.<br>Intenta recargar la página.</p>';
     }
 }
 
@@ -505,6 +770,26 @@ document.addEventListener('DOMContentLoaded', ()=>{
     cargarNegocios();
     document.getElementById('filtro-categoria').addEventListener('change', aplicarFiltros);
     document.getElementById('busqueda-nombre').addEventListener('input', aplicarFiltros);
+
+    // Listener Botón VER FAVORITOS
+    const btnToggleFav = document.getElementById('btn-toggle-favoritos');
+    const iconToggle = document.getElementById('icon-toggle-fav');
+    const textToggle = document.getElementById('text-toggle-fav');
+
+    btnToggleFav.addEventListener('click', () => {
+        viendoSoloFavoritos = !viendoSoloFavoritos; 
+        
+        if (viendoSoloFavoritos) {
+            btnToggleFav.classList.add('activo-filtro');
+            iconToggle.classList.replace('far', 'fas');
+            textToggle.textContent = "Ver Todos";
+        } else {
+            btnToggleFav.classList.remove('activo-filtro');
+            iconToggle.classList.replace('fas', 'far');
+            textToggle.textContent = "Ver mis Favoritos";
+        }
+        aplicarFiltros(); 
+    });
 });
 </script>
 
