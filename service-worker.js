@@ -53,13 +53,19 @@ self.addEventListener('fetch', (e) => {
     else {
         e.respondWith(
             caches.match(e.request).then((cachedResponse) => {
-                // Si está en la caché, lo devuelve al instante. Si no, lo va a buscar a la red.
                 return cachedResponse || fetch(e.request).then((fetchResponse) => {
+                    // Validar que la respuesta sea válida y exitosa antes de guardar
+                    if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') {
+                        return fetchResponse; 
+                    }
+
                     // Guarda una copia de los archivos nuevos en la caché automáticamente
-                    return caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(e.request, fetchResponse.clone());
-                        return fetchResponse;
+                    let responseToCache = fetchResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(e.request, responseToCache);
                     });
+                    
+                    return fetchResponse;
                 });
             })
         );
