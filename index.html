@@ -1,797 +1,450 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Directorio de Negocios Papagayos</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compra Lista | Menú Principal</title>
+    
+    <!-- Enlace al Manifest para la PWA -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#0284C7">
+    
+    <!-- Fuentes y Animaciones del Index 23 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        /* --- Variables Modo Claro (Sierras Web) --- */
+        :root {
+            --primary-color: #0284C7; 
+            --primary-dark: #0369A1;
+            --primary-light: rgba(2, 132, 199, 0.1);
+            --text-dark: #0F172A;
+            --text-gray: #475569;
+            --bg-light: #F8FAFC;
+            --white: #FFFFFF;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --border-color: #E2E8F0;
+            --pattern-color: #cbd5e1;
+            --font-main: 'Inter', sans-serif;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.4s;
+        }
 
-<style>
-/* --- VARIABLES Y CONFIGURACIÓN BASE --- */
-:root {
-    --primary: #2E7D32; /* Verde bosque profesional */
-    --primary-light: #e8f5e9;
-    --accent: #FF6D00; /* Naranja vibrante */
-    --bg-body: #F4F6F8;
-    --text-dark: #1E293B;
-    --text-gray: #64748B;
-    --white: #ffffff;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-    --shadow-hover: 0 12px 24px rgba(0,0,0,0.1);
-    --radius: 16px;
-    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
+        /* --- Variables Modo Oscuro (Sierras Web) --- */
+        [data-theme="dark"] {
+            --text-dark: #F8FAFC;
+            --text-gray: #94A3B8;
+            --bg-light: #0F172A;
+            --white: #1E293B;
+            --nav-bg: rgba(30, 41, 59, 0.85);
+            --border-color: #334155;
+            --pattern-color: #334155;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+            --primary-light: rgba(2, 132, 199, 0.2);
+        }
 
-body { 
-    font-family: 'Inter', sans-serif; 
-    margin: 0; 
-    padding: 0; 
-    background-color: var(--bg-body); 
-    color: var(--text-dark);
-    -webkit-font-smoothing: antialiased;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        
+        body { 
+            font-family: var(--font-main); 
+            color: var(--text-dark); 
+            background-color: var(--white); 
+            line-height: 1.7; 
+            transition: background-color var(--transition-speed), color var(--transition-speed); 
+            overflow-x: hidden;
+        }
+        
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
-h1, h2, h3 { font-family: 'Poppins', sans-serif; margin: 0; }
+        /* --- Navegación Efecto Cristal --- */
+        .navbar {
+            position: fixed; width: 100%; top: 0; background-color: var(--nav-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            z-index: 1000; border-bottom: 1px solid var(--border-color); 
+            transition: all var(--transition-speed);
+        }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+        .logo { font-size: 1.6rem; font-weight: 800; color: var(--text-dark); text-decoration: none; letter-spacing: -0.5px; transition: transform 0.3s; display: flex; align-items: center; gap: 10px;}
+        .logo:hover { transform: scale(1.05); }
+        .logo span { color: var(--primary-color); }
+        .logo img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+        
+        /* --- Botón Theme Toggle --- */
+        .theme-toggle {
+            background: var(--bg-light); border: 1px solid var(--border-color); cursor: pointer;
+            width: 42px; height: 42px; border-radius: 50%; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+            margin-left: auto;
+        }
+        .theme-toggle:hover { background-color: var(--border-color); box-shadow: var(--shadow-sm); }
+        .theme-toggle svg { position: absolute; width: 20px; height: 20px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 
-/* --- HEADER / HERO SECTION --- */
-header { 
-    background: linear-gradient(135deg, #1b5e20 0%, #43a047 100%);
-    color: white; 
-    padding: 60px 20px; 
-    text-align: center; 
-    border-radius: 0 0 30px 30px;
-    box-shadow: 0 4px 20px rgba(46, 125, 50, 0.25);
-    margin-bottom: 40px;
-}
-header h1 { font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 10px; }
-header p { font-size: 1.1rem; opacity: 0.9; font-weight: 400; max-width: 600px; margin: 0 auto; }
+        .moon-icon { opacity: 1; transform: translateY(0) rotate(0deg); color: var(--text-gray); }
+        .sun-icon { opacity: 0; transform: translateY(30px) rotate(45deg); color: #F59E0B; }
+        [data-theme="dark"] .moon-icon { opacity: 0; transform: translateY(-30px) rotate(-45deg); }
+        [data-theme="dark"] .sun-icon { opacity: 1; transform: translateY(0) rotate(0deg); }
 
-/* --- LAYOUT PRINCIPAL --- */
-.container { 
-    display: flex; 
-    max-width: 1280px; 
-    margin: 0 auto; 
-    padding: 0 20px; 
-    gap: 30px;
-}
+        /* --- Hero Section Dinámico --- */
+        .hero {
+            padding: 160px 0 100px; background-color: var(--bg-light);
+            background-image: radial-gradient(var(--pattern-color) 1.5px, transparent 1.5px);
+            background-size: 35px 35px; text-align: center;
+            transition: background-color var(--transition-speed);
+            position: relative;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(2,132,199,0.05) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+        .hero-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center;}
+        
+        .hero-img {
+            width: 130px; height: 130px; border-radius: 50%; object-fit: cover;
+            border: 4px solid var(--white); box-shadow: var(--shadow-lg);
+            margin-bottom: 30px; background: var(--white);
+        }
 
-/* --- SIDEBAR (FILTROS) --- */
-.sidebar { 
-    width: 280px; 
-    flex-shrink: 0;
-    background: var(--white); 
-    padding: 25px; 
-    border-radius: var(--radius); 
-    box-shadow: var(--shadow-sm); 
-    height: fit-content;
-    position: sticky; 
-    top: 20px;
-}
-.sidebar h3 { font-size: 1.1rem; color: var(--text-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-.sidebar h3 i { color: var(--primary); }
+        .hero h1 { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px; }
+        .hero h1 span { 
+            color: var(--primary-color); 
+            background: linear-gradient(90deg, var(--primary-color), #0EA5E9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p { font-size: 1.2rem; color: var(--text-gray); max-width: 600px; margin: 0 auto; }
+        
+        /* --- Secciones Generales --- */
+        .section { padding: 100px 0; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-size: 2.2rem; font-weight: 800; color: var(--text-dark); }
 
-.filter-group { margin-bottom: 20px; }
-.filter-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-dark); }
-.filter-group input, .filter-group select { 
-    width: 100%; 
-    padding: 12px 15px; 
-    border: 1px solid #e2e8f0; 
-    border-radius: 10px; 
-    background-color: #f8fafc; 
-    font-size: 0.95rem; 
-    transition: var(--transition);
-    outline: none;
-    font-family: 'Inter', sans-serif;
-    box-sizing: border-box;
-}
-.filter-group input:focus, .filter-group select:focus {
-    border-color: var(--primary);
-    background-color: var(--white);
-    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
-}
+        /* --- Menú de Ciudades --- */
+        .cities-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 25px; 
+            max-width: 900px; 
+            margin: 0 auto; 
+        }
+        
+        .city-card { 
+            background: var(--white); 
+            padding: 25px 30px; 
+            border-radius: 20px; 
+            border: 1px solid var(--border-color); 
+            transition: all 0.4s ease; 
+            display: flex; 
+            align-items: center; 
+            text-decoration: none; 
+            color: var(--text-dark);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .city-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: var(--shadow-lg); 
+            border-color: var(--primary-light); 
+        }
+        
+        .city-card::before { 
+            content: '📍'; 
+            font-size: 1.5rem; 
+            margin-right: 15px; 
+            background-color: var(--primary-light);
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+        
+        .city-card:hover::before { transform: scale(1.1) rotate(5deg); }
+        .city-name { font-size: 1.25rem; font-weight: 600; flex-grow: 1; }
+        .city-arrow { color: var(--primary-color); opacity: 0; transform: translateX(-15px); transition: all 0.3s ease; font-weight: bold; font-size: 1.2rem; }
+        .city-card:hover .city-arrow { opacity: 1; transform: translateX(0); }
 
-/* --- LISTA DE NEGOCIOS --- */
-.negocios-list { 
-    flex-grow: 1; 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-    gap: 25px;
-    align-content: start;
-}
+        /* --- Banner de Instalación PWA (NUEVO) --- */
+        .install-banner {
+            position: fixed;
+            bottom: -150px; /* Oculto por defecto */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            max-width: 450px;
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            z-index: 2000;
+            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .install-banner.show {
+            bottom: 20px;
+            opacity: 1;
+            visibility: visible;
+        }
 
-/* --- TARJETA DE NEGOCIO (CARD) --- */
-.negocio-card { 
-    background: var(--white); 
-    border-radius: var(--radius); 
-    box-shadow: var(--shadow-sm); 
-    transition: var(--transition); 
-    position: relative; 
-    cursor: pointer;
-    border: 1px solid transparent;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
+        .install-content { display: flex; align-items: center; gap: 12px; }
+        .install-icon { width: 45px; height: 45px; border-radius: 10px; object-fit: cover; }
+        .install-text { display: flex; flex-direction: column; }
+        .install-text strong { font-size: 1rem; color: var(--text-dark); line-height: 1.2; }
+        .install-text span { font-size: 0.8rem; color: var(--text-gray); }
+        
+        .install-actions { display: flex; align-items: center; gap: 8px; }
+        .install-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .install-btn:hover { background-color: var(--primary-dark); }
+        
+        .close-install-btn {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            color: var(--text-gray);
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .close-install-btn:hover { background: var(--border-color); }
 
-.negocio-card:hover { 
-    transform: translateY(-5px); 
-    box-shadow: var(--shadow-hover);
-    border-color: rgba(46, 125, 50, 0.2);
-}
+        /* Ocultar en escritorio para mejorar la experiencia */
+        @media (min-width: 769px) {
+            .install-banner { display: none !important; }
+        }
 
-/* Header de la tarjeta */
-.card-header { 
-    display: flex; 
-    align-items: center; 
-    padding: 20px; 
-    background: #fff;
-    border-bottom: 1px solid #f1f5f9;
-}
+        /* --- Footer --- */
+        footer { padding: 50px 0; text-align: center; color: var(--text-gray); background-color: var(--bg-light); border-top: 1px solid var(--border-color); transition: all var(--transition-speed); }
+        .footer-logo { font-size: 1.5rem; font-weight: 800; color: var(--text-dark); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        .footer-logo span { color: var(--primary-color); }
 
-.logo { 
-    width: 65px; 
-    height: 65px; 
-    border-radius: 50%; 
-    object-fit: cover; 
-    margin-right: 15px; 
-    border: 2px solid #e2e8f0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.info-principal { flex: 1; }
-.info-principal h2 { font-size: 1.15rem; color: var(--text-dark); line-height: 1.3; margin-bottom: 4px; }
-.info-principal .rubro { 
-    font-size: 0.75rem; 
-    color: var(--primary); 
-    font-weight: 700; 
-    text-transform: uppercase; 
-    letter-spacing: 0.5px;
-    background: var(--primary-light);
-    padding: 4px 8px;
-    border-radius: 6px;
-    display: inline-block;
-}
-
-/* Cuerpo de la tarjeta */
-.card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 10px;}
-
-.info-row { display: flex; align-items: flex-start; gap: 10px; color: var(--text-gray); font-size: 0.9rem; }
-.info-row i { color: #94a3b8; margin-top: 3px; width: 16px; text-align: center;}
-.info-row.payment i { color: #3b82f6; }
-
-.horarios-concisos { 
-    font-size: 0.85rem; 
-    color: var(--text-gray); 
-    background: #f8fafc;
-    padding: 10px;
-    border-radius: 8px;
-    line-height: 1.5;
-}
-
-/* DELIVERY INFO BOX */
-.delivery-info-box {
-    background-color: #fff7ed;
-    border: 1px dashed #ffcc80;
-    border-radius: 8px;
-    padding: 10px;
-    margin-top: 5px;
-    font-size: 0.85rem;
-    color: var(--text-dark);
-}
-
-.delivery-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-}
-.delivery-row:last-child { margin-bottom: 0; }
-.delivery-row i { color: var(--accent); width: 16px; text-align: center; }
-
-.costo-gratis {
-    color: var(--primary);
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.5px;
-}
-.costo-precio { font-weight: 700; color: var(--text-dark); }
-
-/* Estados */
-.estado-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: auto;
-    padding-top: 15px;
-}
-
-.estado { 
-    padding: 6px 12px; 
-    border-radius: 20px; 
-    font-weight: 600; 
-    font-size: 0.75rem; 
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.estado::before { content: ''; width: 8px; height: 8px; border-radius: 50%; display: block; }
-
-.estado.abierto { background-color: #ecfdf5; color: #059669; }
-.estado.abierto::before { background-color: #059669; }
-
-.estado.cerrado { background-color: #fef2f2; color: #dc2626; }
-.estado.cerrado::before { background-color: #dc2626; }
-
-/* Icono Delivery flotante */
-.delivery-badge {
-    position: absolute;
-    /* top: 20px;  <-- Modificado para que no choque con el corazón */
-    top: 60px;
-    right: 20px;
-    font-size: 1.2rem;
-    color: var(--text-gray);
-    opacity: 0.2;
-}
-.delivery-badge.has-delivery {
-    color: var(--accent);
-    opacity: 1;
-    background: #fff7ed;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(255, 109, 0, 0.2);
-}
-
-/* Banner de Oferta */
-.banner-simple {
-    background: linear-gradient(90deg, #fff3e0 0%, #ffe0b2 100%);
-    color: #e65100;
-    padding: 8px 12px;
-    margin-top: 8px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-left: 3px solid #ef6c00;
-}
-
-/* Botones Paginación */
-.page-buttons { text-align: center; margin: 40px 0; }
-.page-buttons button { 
-    margin: 0 4px; 
-    width: 40px; 
-    height: 40px; 
-    border: none; 
-    border-radius: 10px; 
-    background: white; 
-    color: var(--text-dark); 
-    cursor: pointer; 
-    font-weight: 600;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-}
-.page-buttons button:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-.page-buttons button.active { background: var(--primary); color: white; transform: scale(1.1); }
-
-/* Spinner */
-#spinner {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(255,255,255,0.95);
-    display: flex; flex-direction: column; gap: 15px;
-    align-items: center; justify-content: center;
-    z-index: 9999;
-}
-.spinner-icon { font-size: 3rem; color: var(--primary); }
-.spinner-text { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--text-dark); }
-
-/* --- ESTILOS PARA FAVORITOS (NUEVO) --- */
-.btn-favorito {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: white;
-    border: 1px solid #e2e8f0;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.2s, color 0.2s;
-    font-size: 1.1rem;
-    color: #cbd5e1; /* Gris cuando no es favorito */
-}
-.btn-favorito:hover { transform: scale(1.15); }
-.btn-favorito.activo {
-    color: #ff4757; 
-    border-color: #ff4757;
-    background: #fff0f1;
-}
-
-/* Botón de filtro "Ver Favoritos" */
-.toggle-fav-container {
-    margin-bottom: 20px;
-    background: #fff0f1;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px dashed #ff4757;
-    text-align: center;
-}
-.btn-ver-favoritos {
-    background: transparent;
-    border: none;
-    color: #ff4757;
-    font-weight: 700;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-}
-.btn-ver-favoritos i { font-size: 1.2rem; }
-.btn-ver-favoritos.activo-filtro {
-    background: #ff4757;
-    color: white;
-    padding: 8px;
-    border-radius: 8px;
-}
-
-/* Responsive */
-@media(max-width: 992px){
-    .container{ flex-direction: column; }
-    .sidebar{ width: auto; position: static; margin-bottom: 20px; }
-    header { padding: 40px 20px; border-radius: 0 0 20px 20px; }
-    header h1 { font-size: 1.8rem; }
-}
-
-/* --- FOOTER Y SECCIÓN DE CONTACTO --- */
-footer {
-    background-color: var(--text-dark);
-    color: var(--white);
-    padding: 60px 20px 40px 20px;
-    margin-top: 100px;
-    text-align: center;
-}
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.cta-section {
-    background: var(--white);
-    color: var(--text-dark);
-    padding: 40px 30px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-hover);
-    width: 90%;            
-    max-width: 600px;      
-    margin: 0 auto;        
-    transform: translateY(-110px); 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.cta-section h3 { color: var(--primary); margin-bottom: 10px; font-size: 1.5rem; }
-.cta-section p { margin-bottom: 20px; color: var(--text-gray); max-width: 450px; }
-
-.btn-whatsapp {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background-color: #25D366;
-    color: white;
-    padding: 16px 32px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 700;
-    transition: var(--transition);
-}
-.btn-whatsapp:hover {
-    background-color: #128C7E;
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
-}
-.copyright-bar {
-    margin-top: -50px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 30px;
-    width: 100%;
-    font-size: 0.9rem;
-    color: #94a3b8;
-}
-
-@media(max-width: 768px){
-    header { padding: 40px 15px; }
-    header h1 { font-size: 2rem; }
-    .cta-section { width: 95%; transform: translateY(-90px); padding: 30px 15px; }
-    .cta-section h3 { font-size: 1.3rem; }
-    .copyright-bar { margin-top: -30px; }
-}
-</style>
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .hero { padding: 130px 0 80px; }
+            .hero h1 { font-size: 2.8rem; }
+            .cities-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<div id="spinner">
-    <i class="fas fa-circle-notch fa-spin spinner-icon"></i>
-    <div class="spinner-text">Cargando negocios...</div>
-</div>
-
-<header>
-    <h1>COMPRA LISTA</h1>
-    <p>La guía definitiva de comercios y servicios en Papagayos.</p>
-</header>
-
-<div class="container">
-    <aside class="sidebar">
-        <h3><i class="fas fa-filter"></i> Filtros</h3>
-        
-        <div class="toggle-fav-container">
-            <button id="btn-toggle-favoritos" class="btn-ver-favoritos">
-                <i class="far fa-heart" id="icon-toggle-fav"></i> 
-                <span id="text-toggle-fav">Ver mis Favoritos</span>
+    <!-- Navbar Estilo Cristal -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <img src="https://i.postimg.cc/kXsXjRvD/logo.png" alt="Icono">
+                Compra<span>Lista</span>
+            </a>
+            
+            <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar Tema">
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
             </button>
         </div>
+    </nav>
 
-        <div class="filter-group">
-            <label for="busqueda-nombre">Buscar</label>
-            <input type="text" id="busqueda-nombre" placeholder="¿Qué estás buscando?">
+    <!-- Header / Hero Dinámico -->
+    <header class="hero">
+        <div class="container hero-content">
+            <img src="https://i.postimg.cc/kXsXjRvD/logo.png" alt="Logo Compra Lista" class="hero-img" data-aos="zoom-in">
+            <h1 data-aos="fade-up" data-aos-delay="100">Compra <span>Lista</span></h1>
+            <p data-aos="fade-up" data-aos-delay="200">Selecciona tu ciudad para comenzar a organizar tus compras.</p>
         </div>
-        <div class="filter-group">
-            <label for="filtro-categoria">Categoría</label>
-            <select id="filtro-categoria">
-                <option value="todos">Ver todas</option>
-            </select>
-        </div>
-    </aside>
+    </header>
 
-    <main class="negocios-list" id="negocios-container"></main>
-</div>
+    <!-- Sección del Menú Principal -->
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <h2>Ciudades Disponibles</h2>
+                </div>
+                
+                <div class="cities-grid">
+                    <a href="merlo.html" class="city-card" data-aos="fade-up" data-aos-delay="150">
+                        <span class="city-name">Merlo</span>
+                        <span class="city-arrow">➜</span>
+                    </a>
+                    <a href="carpinteria.html" class="city-card" data-aos="fade-up" data-aos-delay="150">
+                        <span class="city-name">Carpintería</span>
+                        <span class="city-arrow">➜</span>
+                    </a>
+                    <a href="losmolles.html" class="city-card" data-aos="fade-up" data-aos-delay="150">
+                        <span class="city-name">Los Molles</span>
+                        <span class="city-arrow">➜</span>
+                    </a>
+                    <a href="cortaderas.html" class="city-card" data-aos="fade-up" data-aos-delay="150">
+                        <span class="city-name">Cortaderas</span>
+                        <span class="city-arrow">➜</span>
+                    </a>
+                    <a href="villalarca.html" class="city-card" data-aos="fade-up" data-aos-delay="150">
+                        <span class="city-name">Villa Larca</span>
+                        <span class="city-arrow">➜</span>
+                    </a>
+                    <a href="papagayos.html" class="city-card" data-aos="fade-up" data-aos-delay="150">
+                        <span class="city-name">Papagayos</span>
+                        <span class="city-arrow">➜</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
 
-<div class="page-buttons" id="paginador"></div>
-<footer>
-    <div class="footer-content">
-        <div class="cta-section">
-            <h3>¿Tenés un comercio o brindás un servicio?</h3>
-            <p>Sumate a la guía más completa de Papagayos y aumentá tus ventas.</p>
-            <a href="https://wa.me/5492664212722?text=Hola!%20Me%20interesa%20sumar%20mi%20negocio%20a%20Compra%20Lista" class="btn-whatsapp" target="_blank">
-                <i class="fab fa-whatsapp"></i> AGREGAR MI NEGOCIO
-            </a>
+    <!-- BANNER PWA -->
+    <div id="install-banner" class="install-banner">
+        <div class="install-content">
+            <img src="https://i.postimg.cc/kXsXjRvD/logo.png" alt="Icono" class="install-icon">
+            <div class="install-text">
+                <strong>Compra Lista</strong>
+                <span>Instalar aplicación web</span>
+            </div>
         </div>
-        
-        <div class="copyright-bar">
-            <p>&copy; 2026 Compra Lista. Todos los derechos reservados.</p>
-            <p><small>Diseñado para potenciar el comercio local.</small></p>
+        <div class="install-actions">
+            <button id="install-btn" class="install-btn">Instalar</button>
+            <button id="close-install-banner" class="close-install-btn" aria-label="Cerrar">✕</button>
         </div>
     </div>
-</footer>
 
-<script>
-// --- VARIABLES GLOBALES ---
-let allCards = [];
-let currentPage = 1;
-const cardsPerPage = 15;
-// URL DEL SCRIPT DE GOOGLE
-const scriptURL = "https://script.google.com/macros/s/AKfycbywaflemD-hyg3aUdjlDr_TQHuquGHinA9zncOYxSrkM1MXnd7wRAWWjMGLvEV1MFvr/exec";
+    <!-- Footer minimalista -->
+    <footer>
+        <div class="container">
+            <a href="#" class="footer-logo">Compra<span>Lista</span></a>
+            <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">Tu menú inteligente de compras.</p>
+        </div>
+    </footer>
 
-// --- LÓGICA DE FAVORITOS (LOCALSTORAGE) ---
-let misFavoritos = JSON.parse(localStorage.getItem('userFavoritos')) || [];
-let viendoSoloFavoritos = false;
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Inicializar Animaciones
+        AOS.init({ duration: 800, once: true, offset: 50 });
 
-function guardarFavorito(nombreNegocio) {
-    if (misFavoritos.includes(nombreNegocio)) {
-        misFavoritos = misFavoritos.filter(fav => fav !== nombreNegocio);
-    } else {
-        misFavoritos.push(nombreNegocio);
-    }
-    localStorage.setItem('userFavoritos', JSON.stringify(misFavoritos));
-    actualizarBotonesCorazon();
-    if (viendoSoloFavoritos) aplicarFiltros(); 
-}
+        // Sombra de Navbar al scrollear
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+        });
 
-function actualizarBotonesCorazon() {
-    allCards.forEach(card => {
-        const nombre = card.getAttribute('data-nombre');
-        const btn = card.querySelector('.btn-favorito');
-        const icon = btn.querySelector('i');
-        
-        if (misFavoritos.includes(nombre)) {
-            btn.classList.add('activo');
-            icon.classList.remove('far'); 
-            icon.classList.add('fas');    
-        } else {
-            btn.classList.remove('activo');
-            icon.classList.remove('fas');
-            icon.classList.add('far');
+        // Lógica del Modo Oscuro
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+            htmlElement.setAttribute('data-theme', 'dark');
         }
-    });
-}
 
-// --- LÓGICA DE HORARIOS ---
-function checkHorario(card){
-    const ahora = new Date();
-    const dia = ahora.getDay();
-    const horaMinutos = ahora.getHours()*60 + ahora.getMinutes();
-    const dias = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
-    const hoy = card.getAttribute('data-' + dias[dia].toLowerCase()) || 'Cerrado';
-    
-    if(hoy.toLowerCase().includes('cerrado')) return {estado:'cerrado', texto:'Cerrado ahora'};
-    
-    const bloques = hoy.split(',').map(b=>b.trim());
-    for(const b of bloques){
-        let [ini, fin] = b.split('-');
-        if(!ini || !fin) continue;
-        if(!ini.includes(':')) ini += ':00';
-        if(!fin.includes(':')) fin += ':00';
-        const [hI,mI]=ini.split(':').map(Number); 
-        const [hF,mF]=fin.split(':').map(Number);
-        let inicio = hI*60+mI; 
-        let cierre = hF*60+mF; 
-        if(cierre < inicio) cierre += 1440;
-        
-        if(horaMinutos >= inicio && horaMinutos < cierre) return {estado:'abierto', texto:`Abierto hasta ${fin}`};
-    }
-    return {estado:'cerrado', texto:'Cerrado ahora'};
-}
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                htmlElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
 
-function actualizarEstados(){
-    allCards.forEach(card=>{
-        const res = checkHorario(card);
-        const estadoSpan = card.querySelector('.estado');
-        estadoSpan.textContent = res.texto;
-        estadoSpan.classList.remove('abierto','cerrado');
-        estadoSpan.classList.add(res.estado);
-        
-        const diasSemana = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
-        const diaActual = new Date().getDay(); 
-        const diaIndex = diaActual === 0 ? 6 : diaActual - 1; 
+        // ==========================================
+        // LÓGICA DE INSTALACIÓN PWA
+        // ==========================================
+        let deferredPrompt;
+        const installBanner = document.getElementById('install-banner');
+        const installBtn = document.getElementById('install-btn');
+        const closeInstallBtn = document.getElementById('close-install-banner');
 
-        const nombreDiaHoy = diasSemana[diaIndex];
-        const horarioHoy = card.getAttribute('data-'+nombreDiaHoy.toLowerCase());
-        
-        card.querySelector('.horarios-concisos').innerHTML = `
-            <strong>Hoy (${nombreDiaHoy}):</strong> ${horarioHoy ? horarioHoy : 'Consultar'}
-        `;
-    });
-}
-
-// --- PAGINACIÓN ---
-function mostrarPagina(cards, page=1){
-    const container = document.getElementById('negocios-container');
-    container.innerHTML = '';
-    
-    // Si no hay resultados
-    if(cards.length === 0) {
-        container.innerHTML = `<div style="width:100%; text-align:center; padding:40px; color:#64748B;">
-            <i class="far fa-frown" style="font-size:3rem; margin-bottom:10px;"></i>
-            <h3>No encontramos negocios</h3>
-            <p>${viendoSoloFavoritos ? 'Aún no tienes favoritos guardados.' : 'Intenta con otro filtro.'}</p>
-        </div>`;
-        document.getElementById('paginador').innerHTML = '';
-        return;
-    }
-
-    const start = (page-1)*cardsPerPage;
-    const end = start+cardsPerPage;
-    const pageCards = cards.slice(start, end);
-    
-    pageCards.forEach((c, index) => {
-        c.style.animation = `fadeIn 0.4s ease forwards ${index * 0.05}s`;
-        c.style.opacity = '0';
-        container.appendChild(c);
-    });
-
-    const pagDiv = document.getElementById('paginador');
-    pagDiv.innerHTML = '';
-    const totalPages = Math.ceil(cards.length/cardsPerPage);
-    if(totalPages > 1){
-        for(let i=1;i<=totalPages;i++){
-            const btn = document.createElement('button');
-            btn.textContent = i;
-            if(i===page) btn.classList.add('active');
-            btn.addEventListener('click',()=>{currentPage=i; mostrarPagina(cards,currentPage); window.scrollTo(0,0);});
-            pagDiv.appendChild(btn);
-        }
-    }
-}
-
-// Animación CSS JS
-const styleSheet = document.createElement("style");
-styleSheet.innerText = `@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(10px); } }`;
-document.head.appendChild(styleSheet);
-
-// --- FILTROS ---
-function aplicarFiltros(){
-    let filtrados = allCards;
-    const cat = document.getElementById('filtro-categoria').value.toLowerCase();
-    const busq = document.getElementById('busqueda-nombre').value.toLowerCase();
-
-    // 1. Filtro Categoría
-    if(cat !== 'todos') filtrados = filtrados.filter(c=>c.getAttribute('data-rubro') === cat);
-    
-    // 2. Filtro Buscador
-    if(busq!=='') filtrados = filtrados.filter(c=>c.querySelector('h2').textContent.toLowerCase().includes(busq));
-
-    // 3. Filtro FAVORITOS
-    if (viendoSoloFavoritos) {
-        filtrados = filtrados.filter(c => misFavoritos.includes(c.getAttribute('data-nombre')));
-    }
-
-    const abiertos = filtrados.filter(c=>c.querySelector('.estado').classList.contains('abierto'));
-    const cerrados = filtrados.filter(c=>!c.querySelector('.estado').classList.contains('abierto'));
-
-    const shuffle = (array) => array.sort(() => Math.random() - 0.5);
-    filtrados = [...shuffle(abiertos), ...shuffle(cerrados)];
-    mostrarPagina(filtrados, 1);
-}
-
-function cargarLogo(img){
-    img.onerror = ()=> img.src = 'https://ui-avatars.com/api/?background=random&color=fff&size=128&name=Negocio';
-}
-
-// --- CARGA DE DATOS ---
-async function cargarNegocios() {
-    try {
-        const res = await fetch(scriptURL);
-        const negocios = await res.json();
-
-        const container = document.getElementById('negocios-container');
-        container.innerHTML = '';
-
-        negocios.forEach(n=>{
-            const card = document.createElement('div');
-            card.classList.add('negocio-card');
-            
-            card.setAttribute('data-nombre', n.Nombre); 
-            card.setAttribute('data-rubro', n.Rubro.toLowerCase());
-            ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"].forEach(d => {
-                card.setAttribute('data-'+d.toLowerCase(), n[d] || 'Cerrado');
+        // 1. Registro del Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('SW registrado con éxito:', reg.scope))
+                    .catch(err => console.warn('Error al registrar SW:', err));
             });
+        }
 
-            const formasPago = n["Formas de pago"] || n["Formas de Pago"] || 'Consultar';
-            const tieneDelivery = n.Delivery === true;
+        // 2. Capturar el evento de instalación
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevenir que el navegador muestre su propio prompt genérico
+            e.preventDefault();
+            // Guardar el evento para dispararlo cuando el usuario haga clic
+            deferredPrompt = e;
+            // Mostrar nuestro banner personalizado con una pequeña demora para que sea más natural
+            setTimeout(() => {
+                installBanner.classList.add('show');
+            }, 1500); 
+        });
 
-            // Logica Delivery
-            let rawCosto = n["Costo Delivery"]; 
-            let horarioDelivery = n["Horario Delivery"] || "";
-            let htmlCosto = "";
-
-            if (rawCosto !== undefined && rawCosto !== "") {
-                if (rawCosto == 0 || String(rawCosto).toLowerCase().includes("gratis")) {
-                    htmlCosto = `<span class="costo-gratis">¡GRATIS!</span>`;
+        // 3. Manejar el clic en "Instalar"
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Mostrar el prompt nativo del sistema
+                deferredPrompt.prompt();
+                // Esperar la decisión del usuario
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('El usuario aceptó instalar la PWA');
                 } else {
-                    const esNumero = !isNaN(rawCosto);
-                    htmlCosto = `<span class="costo-precio">${esNumero ? '$' + rawCosto : rawCosto}</span>`;
+                    console.log('El usuario rechazó instalar la PWA');
                 }
+                // Limpiar la variable y ocultar el banner
+                deferredPrompt = null;
+                installBanner.classList.remove('show');
             }
-
-            let bloqueDelivery = "";
-            if (tieneDelivery && (htmlCosto || horarioDelivery)) {
-                bloqueDelivery = `
-                <div class="delivery-info-box">
-                    ${htmlCosto ? `<div class="delivery-row"><i class="fas fa-motorcycle"></i> <span>Envío: ${htmlCosto}</span></div>` : ''}
-                    ${horarioDelivery ? `<div class="delivery-row"><i class="far fa-clock"></i> <span>${horarioDelivery}</span></div>` : ''}
-                </div>`;
-            }
-
-            // HTML Interno
-            card.innerHTML = `
-                <button class="btn-favorito" title="Agregar a favoritos">
-                    <i class="far fa-heart"></i>
-                </button>
-
-                <div class="card-header">
-                    <img src="${n["Logo URL"]}" alt="Logo" class="logo">
-                    <div class="info-principal">
-                        <h2>${n.Nombre}</h2>
-                        <span class="rubro">${n.Rubro}</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="info-row">
-                        <i class="fas fa-map-marker-alt"></i> 
-                        <span>${n.Domicilio}</span>
-                    </div>
-                    <div class="horarios-concisos"></div>
-                    <div class="info-row payment">
-                        <i class="fas fa-credit-card"></i> 
-                        <span>${formasPago}</span>
-                    </div>
-                    ${bloqueDelivery} ${n.Banner && n.Banner.trim() !== "" 
-                        ? `<div class="banner-simple"><i class="fas fa-bullhorn"></i> ${n.Banner}</div>` 
-                        : ""
-                    }
-                    <div class="estado-container">
-                        <span class="estado">Cargando...</span>
-                    </div>
-                </div>
-                <div class="delivery-badge ${tieneDelivery ? 'has-delivery' : ''}" 
-                     title="${tieneDelivery ? 'Hacen envíos' : 'Sin envío'}">
-                    <i class="fas fa-motorcycle"></i>
-                </div>
-            `;
-
-            cargarLogo(card.querySelector('.logo'));
-            
-            // EVENTOS
-            card.addEventListener('click', ()=> window.open(n.URL,'_blank'));
-            
-            const favBtn = card.querySelector('.btn-favorito');
-            favBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); 
-                guardarFavorito(n.Nombre);
-                favBtn.style.transform = "scale(1.3)";
-                setTimeout(()=> favBtn.style.transform = "scale(1)", 200);
-            });
-
-            container.appendChild(card);
         });
 
-        allCards = Array.from(document.querySelectorAll('.negocio-card'));
-        actualizarEstados();
-        actualizarBotonesCorazon(); 
-
-        const selectCat = document.getElementById('filtro-categoria');
-        const categorias = new Set();
-        allCards.forEach(card=> categorias.add(card.getAttribute('data-rubro')));
-        Array.from(categorias).sort().forEach(cat=>{
-            const option = document.createElement('option');
-            option.value = cat;
-            option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
-            selectCat.appendChild(option);
+        // 4. Manejar el clic en la "X" (Cerrar banner)
+        closeInstallBtn.addEventListener('click', () => {
+            installBanner.classList.remove('show');
         });
 
-        aplicarFiltros();
-        document.getElementById('spinner').style.display = 'none';
-
-    } catch (error) {
-        console.error("Error cargando negocios", error);
-        document.getElementById('spinner').innerHTML = '<p style="color:red; text-align:center;">Error al cargar datos.<br>Intenta recargar la página.</p>';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', ()=>{
-    cargarNegocios();
-    document.getElementById('filtro-categoria').addEventListener('change', aplicarFiltros);
-    document.getElementById('busqueda-nombre').addEventListener('input', aplicarFiltros);
-
-    // Listener Botón VER FAVORITOS
-    const btnToggleFav = document.getElementById('btn-toggle-favoritos');
-    const iconToggle = document.getElementById('icon-toggle-fav');
-    const textToggle = document.getElementById('text-toggle-fav');
-
-    btnToggleFav.addEventListener('click', () => {
-        viendoSoloFavoritos = !viendoSoloFavoritos; 
-        
-        if (viendoSoloFavoritos) {
-            btnToggleFav.classList.add('activo-filtro');
-            iconToggle.classList.replace('far', 'fas');
-            textToggle.textContent = "Ver Todos";
-        } else {
-            btnToggleFav.classList.remove('activo-filtro');
-            iconToggle.classList.replace('fas', 'far');
-            textToggle.textContent = "Ver mis Favoritos";
-        }
-        aplicarFiltros(); 
-    });
-});
-</script>
-
+        // 5. Detectar cuando la instalación se completó
+        window.addEventListener('appinstalled', () => {
+            // Limpiar y ocultar si la app fue instalada exitosamente
+            installBanner.classList.remove('show');
+            deferredPrompt = null;
+            console.log('Aplicación instalada correctamente.');
+        });
+    </script>
 </body>
 </html>
