@@ -345,6 +345,18 @@
             <button id="install-btn" class="install-btn">Instalar</button>
             <button id="close-install-banner" class="close-install-btn" aria-label="Cerrar">✕</button>
         </div>
+        <!-- BANNER DE ACTUALIZACIÓN -->
+    <div id="update-banner" class="install-banner" style="background: var(--text-dark); border-color: var(--text-dark);">
+        <div class="install-content">
+            <div class="install-text">
+                <strong style="color: var(--bg-light);">Nueva versión disponible</strong>
+                <span style="color: var(--text-gray);">Actualizá para ver los últimos cambios.</span>
+            </div>
+        </div>
+        <div class="install-actions">
+            <button id="update-btn" class="install-btn" style="background-color: #F59E0B; color: #0F172A;">Actualizar</button>
+        </div>
+    </div>
     </div>
 
     <!-- Footer minimalista -->
@@ -400,12 +412,47 @@
         const installBtn = document.getElementById('install-btn');
         const closeInstallBtn = document.getElementById('close-install-banner');
 
-        // 1. Registro del Service Worker
+       // 1. Registro del Service Worker y Detección de Actualizaciones
+        let newWorker;
+        const updateBanner = document.getElementById('update-banner');
+        const updateBtn = document.getElementById('update-btn');
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./service-worker.js')
-                    .then(reg => console.log('SW registrado con éxito:', reg.scope))
+                    .then(reg => {
+                        console.log('SW registrado con éxito:', reg.scope);
+                        
+                        // Detectar si hay una nueva versión del SW instalándose
+                        reg.addEventListener('updatefound', () => {
+                            newWorker = reg.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                // Si se instaló uno nuevo y ya había uno viejo controlando la página
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    updateBanner.classList.add('show');
+                                }
+                            });
+                        });
+                    })
                     .catch(err => console.warn('Error al registrar SW:', err));
+            });
+
+            // Escuchar cuando el SW toma el control para recargar la página
+            let refreshing;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    window.location.reload();
+                    refreshing = true;
+                }
+            });
+        }
+
+        // Si el usuario hace clic en "Actualizar", le avisamos al SW que se active
+        if (updateBtn) {
+            updateBtn.addEventListener('click', () => {
+                if (newWorker) {
+                    newWorker.postMessage({ action: 'skipWaiting' });
+                }
             });
         }
 
